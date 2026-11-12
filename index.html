@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id" data-sx="m">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>StudentFlow - Agenda Siswa</title>
+<meta name="theme-color" content="#0b1b3a">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icons/icon-180.png">
+<style>
+:root{--a:#22d3ee;--b:#3b82f6;--bg:#eaf3ff;--pn:#ffffffd9;--ink:#0b1b3a;--mu:#5b6b8c;--bd:#bcd3f5;--ok:#10b981;--er:#f43f5e;--g:linear-gradient(120deg,var(--a),var(--b));--fs:16px}
+[data-sx=f]{--a:#f472b6;--b:#a78bfa;--bg:#fff0f8;--ink:#3a0f35;--mu:#8a5f84;--bd:#f3c3e3}
+.dark{--bg:#060b18;--pn:#0f1a33cc;--ink:#e6f1ff;--mu:#8aa0c8;--bd:#1f3560}
+.dark[data-sx=f]{--bg:#140a1f;--pn:#241238cc;--ink:#ffeefb;--mu:#c09ac0;--bd:#4a2a63}
+body.sd{--fs:19px}body.sma{--fs:15px}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;font:var(--fs)/1.45 system-ui,'Segoe UI',Roboto,sans-serif;color:var(--ink);min-height:100vh;background:radial-gradient(600px 400px at 0 0,color-mix(in srgb,var(--a) 28%,transparent),transparent),radial-gradient(600px 500px at 100% 100%,color-mix(in srgb,var(--b) 28%,transparent),transparent),var(--bg) fixed}
+header{position:sticky;top:0;z-index:5;display:flex;align-items:center;gap:8px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;background:var(--pn);backdrop-filter:blur(14px);border-bottom:1px solid var(--bd)}
+header b{font-size:1.15em;letter-spacing:.12em;text-transform:uppercase;background:var(--g);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sp{flex:1}
+.ib{width:38px;height:38px;border-radius:12px;border:1px solid var(--bd);background:var(--pn);color:var(--ink);font-size:1.05em}
+main{max-width:760px;margin:auto;padding:6px 14px 110px}
+.card{background:var(--pn);border:1px solid var(--bd);border-radius:18px;padding:12px 14px;margin:10px 0;backdrop-filter:blur(10px);box-shadow:0 8px 26px -14px var(--a)}
+.hero{background:var(--g);color:#fff;border:0;display:flex;gap:14px;align-items:center;box-shadow:0 12px 40px -12px var(--a)}
+.hero h1{margin:0;font-size:1.25em}.hero p{margin:2px 0 0;opacity:.9}
+.ring{--p:0;flex:none;width:80px;height:80px;border-radius:50%;background:conic-gradient(#fff calc(var(--p)*1%),#ffffff40 0);display:grid;place-items:center}
+.ring span{width:62px;height:62px;border-radius:50%;background:#0006;display:grid;place-items:center;font-weight:700}
+h2{font-size:.95em;letter-spacing:.14em;text-transform:uppercase;margin:20px 2px 4px;color:var(--mu)}
+.row{display:flex;align-items:center;gap:10px}
+.it{border-left:5px solid var(--c,var(--a));cursor:pointer}
+.it .t{font-weight:600}.it .m{font-size:.82em;color:var(--mu)}
+.done .t{text-decoration:line-through;opacity:.55}
+.tag{font-size:.74em;padding:2px 9px;border-radius:99px;background:color-mix(in srgb,var(--a) 24%,transparent);white-space:nowrap}
+.late{background:color-mix(in srgb,var(--er) 28%,transparent);color:var(--er);font-weight:600}
+.now{box-shadow:0 0 0 2px var(--a),0 0 22px -4px var(--a)}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:6px 0}
+.chip{flex:none;border:1px solid var(--bd);background:var(--pn);color:var(--ink);padding:6px 13px;border-radius:99px;font:inherit}
+.chip.on{background:var(--g);color:#fff;border-color:transparent}
+.ck{width:26px;height:26px;flex:none;accent-color:var(--a)}
+.empty{text-align:center;color:var(--mu);padding:18px 8px}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;background:var(--pn);backdrop-filter:blur(16px);border-top:1px solid var(--bd);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+nav button{flex:1;border:0;background:none;color:var(--mu);font:inherit;font-size:.72em;display:flex;flex-direction:column;align-items:center;gap:1px;padding:4px 0;border-radius:12px}
+nav button i{font-style:normal;font-size:1.5em}
+nav button.on{color:var(--ink);font-weight:700;background:color-mix(in srgb,var(--a) 20%,transparent)}
+.fab{position:fixed;right:18px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:7;width:56px;height:56px;border-radius:50%;border:0;background:var(--g);color:#fff;font-size:2em;line-height:1;box-shadow:0 8px 28px -4px var(--a)}
+dialog{border:1px solid var(--bd);border-radius:20px;background:var(--bg);color:var(--ink);width:min(92vw,440px);padding:16px}
+dialog::backdrop{background:#000a;backdrop-filter:blur(4px)}
+label{display:block;font-size:.8em;color:var(--mu);margin-top:9px}
+input,select,textarea{width:100%;padding:9px 10px;border-radius:12px;border:1px solid var(--bd);background:var(--pn);color:var(--ink);font:inherit}
+.btn{border:0;border-radius:12px;padding:10px 16px;background:var(--g);color:#fff;font:inherit;font-weight:600}
+.btn.gh{background:var(--pn);color:var(--ink);border:1px solid var(--bd)}.btn.dg{background:var(--er)}
+</style>
+</head>
+<body>
+<header><b>StudentFlow</b><span class="sp"></span><button class="ib" id="bx" title="Gaya">♂</button><button class="ib" id="bm" title="Mode">🌙</button><button class="ib" id="bs" title="Pengaturan">⚙️</button></header>
+<main id="v"></main>
+<button class="fab" id="fab">+</button>
+<nav id="nv"></nav>
+<dialog id="dl"></dialog>
+<script>
+const $=s=>document.querySelector(s),H=document.documentElement;
+const DAYS=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+const LV={SD:['Matematika','Bahasa Indonesia','IPAS','Bahasa Inggris','PJOK','Seni Budaya','Agama','PPKn'],SMP:['Matematika','Bahasa Indonesia','Bahasa Inggris','IPA','IPS','PPKn','Informatika','PJOK','Seni Budaya','Agama'],SMA:['Matematika','Bahasa Indonesia','Bahasa Inggris','Fisika','Kimia','Biologi','Sejarah','Ekonomi','Sosiologi','Informatika','PJOK','Agama']};
+let D=JSON.parse(localStorage.getItem('sf')||'null')||{p:{n:'',lv:'SMP',sx:'m',th:'auto'},sub:LV.SMP,jd:[],tg:[],uj:[],kg:[]};
+let tab='home',day=new Date().getDay(),fl={tg:'',uj:'',kg:''},showDone=false;
+const save=()=>{D.t=Date.now();localStorage.setItem('sf',JSON.stringify(D));push()};
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pad=n=>String(n).padStart(2,'0'),td=()=>{const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
+const dd=s=>Math.round((new Date(s+'T00:00')-new Date(td()+'T00:00'))/864e5);
+const rel=n=>n<0?'Lewat '+-n+' hari':n==0?'Hari ini':n==1?'Besok':n+' hari lagi';
+const col=s=>'hsl('+([...String(s)].reduce((a,c)=>a+c.charCodeAt(0),0)*37%360)+' 80% 58%)';
+const fd=s=>s?new Date(s+'T00:00').toLocaleDateString('id-ID',{weekday:'short',day:'numeric',month:'short'}):'';
+const E={
+ jd:{n:'Pelajaran',f:[['sub','Mata pelajaran','sub'],['day','Hari','day'],['st','Mulai','time'],['en','Selesai','time'],['rm','Guru / Ruang','text']]},
+ tg:{n:'PR / Tugas',f:[['ti','Judul','text'],['sub','Mata pelajaran','sub'],['ty','Jenis',['PR','Tugas','Proyek']],['du','Tenggat','date'],['nt','Catatan','text']]},
+ uj:{n:'Ujian / Penilaian',f:[['ti','Nama','text'],['sub','Mata pelajaran','sub'],['ty','Jenis',['Formatif','Sumatif','UTS','UAS','Ulangan']],['dt','Tanggal','date'],['sc','Nilai (isi setelah keluar)','number']]},
+ kg:{n:'Kegiatan',f:[['ti','Nama kegiatan','text'],['ct','Kategori',['Sekolah','Organisasi','Ekskul','Proyek']],['dt','Tanggal','date'],['tm','Jam','time'],['pl','Tempat','text']]}
+};
+const CT={Sekolah:'🏫',Organisasi:'🤝',Ekskul:'⚽',Proyek:'🧪'};
+function theme(){const p=D.p;H.dataset.sx=p.sx;H.classList.toggle('dark',p.th=='dark'||(p.th=='auto'&&matchMedia('(prefers-color-scheme:dark)').matches));document.body.className=p.lv.toLowerCase();$('#bx').textContent=p.sx=='m'?'♂':'♀';$('#bm').textContent=H.classList.contains('dark')?'☀️':'🌙'}
+const chips=(k,opts)=>'<div class="chips">'+['',...opts].map(o=>`<button class="chip ${fl[k]==o?'on':''}" onclick="fl.${k}='${esc(o).replace(/'/g,'')}';go()">${o?(CT[o]||'')+' '+esc(o):'Semua'}</button>`).join('')+'</div>';
+const emp=t=>`<div class="card empty">${t}<br>Tekan <b>+</b> untuk menambah.</div>`;
+function items(k,arr,fn){return arr.length?arr.map(fn).join(''):emp('Belum ada data.')}
+function jItem(x,now){return `<div class="card it row ${now?'now':''}" style="--c:${col(x.sub)}" onclick="openF('jd','${x.id}')"><div class="sp"><div class="t">${esc(x.sub)}</div><div class="m">${esc(x.rm)}</div></div><span class="tag">${esc(x.st)}–${esc(x.en)}</span></div>`}
+function tItem(x){const n=x.du?dd(x.du):99;return `<div class="card it row ${x.done?'done':''}" style="--c:${col(x.sub)}"><input type="checkbox" class="ck" ${x.done?'checked':''} onchange="tg('${x.id}')"><div class="sp" onclick="openF('tg','${x.id}')"><div class="t">${esc(x.ti)}</div><div class="m">${esc(x.sub)} · ${esc(x.ty)}${x.nt?' · '+esc(x.nt):''}</div></div>${x.du&&!x.done?`<span class="tag ${n<0?'late':''}">${rel(n)}</span>`:''}</div>`}
+function uItem(x){const n=dd(x.dt);return `<div class="card it row" style="--c:${col(x.sub)}" onclick="openF('uj','${x.id}')"><div class="sp"><div class="t">${esc(x.ti)}</div><div class="m">${esc(x.sub)} · ${esc(x.ty)} · ${fd(x.dt)}</div></div>${x.sc!==''&&x.sc!=null?`<span class="tag"><b>${esc(x.sc)}</b></span>`:`<span class="tag ${n<0?'late':''}">${n<0?'Selesai':rel(n)}</span>`}</div>`}
+function kItem(x){const n=dd(x.dt);return `<div class="card it row" style="--c:${col(x.ct)}" onclick="openF('kg','${x.id}')"><span style="font-size:1.6em">${CT[x.ct]||'📌'}</span><div class="sp"><div class="t">${esc(x.ti)}</div><div class="m">${esc(x.ct)} · ${fd(x.dt)} ${esc(x.tm)} ${x.pl?'· '+esc(x.pl):''}</div></div><span class="tag">${n<0?'Lewat':rel(n)}</span></div>`}
+const V={
+home(){const h=new Date().getHours(),g=h<11?'pagi':h<15?'siang':h<18?'sore':'malam',tot=D.tg.length,dn=D.tg.filter(x=>x.done).length,p=tot?Math.round(dn*100/tot):0,t=new Date(),hm=pad(t.getHours())+':'+pad(t.getMinutes());
+ const js=D.jd.filter(x=>x.day==t.getDay()).sort((a,b)=>a.st>b.st?1:-1),pend=D.tg.filter(x=>!x.done).sort((a,b)=>(a.du||'9')>(b.du||'9')?1:-1).slice(0,4);
+ const up=[...D.uj.map(x=>({...x,k:'uj'})),...D.kg.map(x=>({...x,k:'kg'}))].filter(x=>x.dt>=td()).sort((a,b)=>a.dt>b.dt?1:-1).slice(0,4);
+ return `<div class="card hero"><div class="ring" style="--p:${p}"><span>${p}%</span></div><div><h1>Selamat ${g}, ${esc(D.p.n||'Teman')}! ${D.p.lv=='SD'?'🌟':'👋'}</h1><p>${tot-dn} tugas belum selesai · ${js.length} pelajaran hari ini</p></div></div>
+ <h2>Jadwal hari ini</h2>${items('jd',js,x=>jItem(x,x.st<=hm&&hm<=x.en))}
+ <h2>Tenggat terdekat</h2>${items('tg',pend,tItem)}
+ <h2>Akan datang</h2>${items('uj',up,x=>x.k=='uj'?uItem(x):kItem(x))}`},
+jd(){return `<h2>Jadwal pelajaran</h2><div class="chips">${[1,2,3,4,5,6,0].map(i=>`<button class="chip ${day==i?'on':''}" onclick="day=${i};go()">${DAYS[i]}</button>`).join('')}</div>`+items('jd',D.jd.filter(x=>x.day==day).sort((a,b)=>a.st>b.st?1:-1),x=>jItem(x,0))},
+tg(){const l=D.tg.filter(x=>(!fl.tg||x.sub==fl.tg)&&!!x.done==showDone).sort((a,b)=>(a.du||'9')>(b.du||'9')?1:-1);
+ return `<h2>PR & Tugas</h2>${chips('tg',D.sub)}<div class="chips"><button class="chip ${!showDone?'on':''}" onclick="showDone=false;go()">Belum selesai</button><button class="chip ${showDone?'on':''}" onclick="showDone=true;go()">Selesai</button></div>`+items('tg',l,tItem)},
+uj(){const sc=D.uj.filter(x=>x.sc!==''&&x.sc!=null),av=sc.length?(sc.reduce((a,x)=>a+ +x.sc,0)/sc.length).toFixed(1):'-';
+ const l=D.uj.filter(x=>!fl.uj||x.ty==fl.uj).sort((a,b)=>a.dt>b.dt?1:-1),u=l.filter(x=>x.dt>=td()),o=l.filter(x=>x.dt<td()).reverse();
+ return `<h2>Ujian & penilaian</h2>${chips('uj',['Formatif','Sumatif','UTS','UAS','Ulangan'])}<div class="card"><b>Rata-rata nilai: ${av}</b> <span class="m">(${sc.length} nilai)</span></div><h2>Akan datang</h2>${items('uj',u,uItem)}<h2>Sudah lewat</h2>${items('uj',o,uItem)}`},
+kg(){const l=D.kg.filter(x=>!fl.kg||x.ct==fl.kg).sort((a,b)=>a.dt>b.dt?1:-1);return `<h2>Kegiatan</h2>${chips('kg',Object.keys(CT))}`+items('kg',l,kItem)}
+};
+const TABS=[['home','🏠','Beranda'],['jd','📅','Jadwal'],['tg','✅','Tugas'],['uj','📝','Ujian'],['kg','🎯','Kegiatan']];
+function go(){$('#v').innerHTML=V[tab]();$('#nv').innerHTML=TABS.map(t=>`<button class="${tab==t[0]?'on':''}" onclick="tab='${t[0]}';go();scrollTo(0,0)"><i>${t[1]}</i>${t[2]}</button>`).join('');$('#fab').style.display=tab=='home'?'none':'';theme()}
+function tg(id){const x=D.tg.find(x=>x.id==id);x.done=!x.done;save();go()}
+function openF(k,id){const e=E[k],it=id?D[k].find(x=>x.id==id):{},dl=$('#dl'),def={day:day,du:td(),dt:td(),st:'07:00',en:'08:00'};
+ const inp=f=>{const[n,l,t]=f,v=it[n]??def[n]??'',o=t=='sub'?[...new Set([...D.sub,...(v?[v]:[])])]:t=='day'?[1,2,3,4,5,6,0]:Array.isArray(t)?t:null;
+  return `<label>${l}</label>`+(o?`<select name="${n}">${o.map(x=>{const val=t=='day'?x:x,lab=t=='day'?DAYS[x]:x;return `<option value="${esc(val)}" ${val==v?'selected':''}>${esc(lab)}</option>`}).join('')}</select>`:`<input name="${n}" type="${t}" value="${esc(v)}" ${n=='ti'?'required':''}>`)};
+ dl.innerHTML=`<form method="dialog" id="fm"><h3 style="margin:0">${id?'Ubah':'Tambah'} ${e.n}</h3>${e.f.map(inp).join('')}<div class="row" style="margin-top:14px">${id?`<button type="button" class="btn dg" onclick="del('${k}','${id}')">Hapus</button>`:''}<span class="sp"></span><button type="button" class="btn gh" onclick="$('#dl').close()">Batal</button><button class="btn">Simpan</button></div></form>`;
+ $('#fm').onsubmit=ev=>{const o=Object.fromEntries(new FormData(ev.target));if(k=='jd')o.day=+o.day;if(id)Object.assign(it,o);else D[k].push({id:Date.now().toString(36),...o});save();go()};dl.showModal()}
+function del(k,id){D[k]=D[k].filter(x=>x.id!=id);save();$('#dl').close();go()}
+function settings(){const p=D.p,s=(n,o)=>`<select name="${n}">${o.map(([v,l])=>`<option value="${v}" ${p[n]==v?'selected':''}>${l}</option>`).join('')}</select>`;
+ $('#dl').innerHTML=`<form method="dialog" id="fm"><h3 style="margin:0">Pengaturan</h3><label>Nama</label><input name="n" value="${esc(p.n)}"><label>Jenjang (mengatur ukuran tampilan & mapel awal)</label>${s('lv',[['SD','SD'],['SMP','SMP'],['SMA','SMA / SMK']])}<label>Gaya</label>${s('sx',[['m','Maskulin (cyan-biru)'],['f','Feminim (pink-ungu)']])}<label>Mode</label>${s('th',[['auto','Otomatis'],['light','Terang'],['dark','Gelap']])}<label>Daftar mata pelajaran (pisahkan koma)</label><textarea name="sub" rows="3">${esc(D.sub.join(', '))}</textarea>
+ <label><input type="checkbox" name="rm" ${p.rm?'checked':''} style="width:auto"> Pengingat: pelajaran 10 menit sebelum, tenggat, ujian, kegiatan (aktif saat aplikasi terbuka/terpasang)</label>
+ <label>Sinkron antar perangkat (Firebase, opsional) ${fbU?'- masuk: '+esc(fbU.email):''}</label><textarea id="fbc" rows="3" placeholder='{ apiKey: "...", authDomain: "...", projectId: "...", appId: "..." }'>${esc(localStorage.getItem('sf_fb')||'')}</textarea>
+ <div class="row" style="margin-top:6px;flex-wrap:wrap"><button type="button" class="btn gh" onclick="fbSave()">Simpan config</button><button type="button" class="btn gh" onclick="fbIn()">Masuk Google</button><button type="button" class="btn gh" onclick="fbOut()">Keluar</button></div>
+ <div class="row" style="margin-top:12px;flex-wrap:wrap"><button type="button" class="btn gh" onclick="exp()">Ekspor</button><button type="button" class="btn gh" onclick="$('#im').click()">Impor</button><input id="im" type="file" accept=".json" hidden><span class="sp"></span><button class="btn">Simpan</button></div></form>`;
+ $('#im').onchange=e=>{const r=new FileReader();r.onload=()=>{try{D=JSON.parse(r.result);save();$('#dl').close();go()}catch{alert('File tidak valid')}};r.readAsText(e.target.files[0])};
+ $('#fm').onsubmit=ev=>{const o=Object.fromEntries(new FormData(ev.target)),first=!D.p.n&&!D.jd.length&&o.lv!=D.p.lv;D.p={n:o.n,lv:o.lv,sx:o.sx,th:o.th,rm:!!o.rm};if(o.rm&&'Notification'in window&&Notification.permission=='default')Notification.requestPermission().then(chk);D.sub=o.sub.split(',').map(x=>x.trim()).filter(Boolean);if(first)D.sub=LV[o.lv];save();go()};$('#dl').showModal()}
+function exp(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(D)],{type:'application/json'}));a.download='studentflow-backup.json';a.click()}
+$('#fab').onclick=()=>openF(tab,'');$('#bs').onclick=settings;
+$('#bx').onclick=()=>{D.p.sx=D.p.sx=='m'?'f':'m';save();theme()};
+$('#bm').onclick=()=>{D.p.th=H.classList.contains('dark')?'light':'dark';save();theme()};
+let fb=null,fbU=null,pt;
+const FV='https://www.gstatic.com/firebasejs/10.12.2/';
+async function fbInit(){const c=localStorage.getItem('sf_fb');if(!c||fb)return;try{const cfg=Function('return('+c+')')(),A=await import(FV+'firebase-app.js'),Au=await import(FV+'firebase-auth.js'),F=await import(FV+'firebase-firestore.js'),app=A.initializeApp(cfg);fb={Au,F,auth:Au.getAuth(app),db:F.getFirestore(app)};Au.onAuthStateChanged(fb.auth,u=>{fbU=u;if(u)pull()})}catch(e){fb=null;alert('Config Firebase tidak valid / gagal dimuat')}}
+const fref=()=>fb.F.doc(fb.db,'users',fbU.uid,'studentflow','data');
+async function pull(){try{const r=await fb.F.getDoc(fref());if(r.exists()&&r.data().t>(D.t||0)){D=JSON.parse(r.data().json);localStorage.setItem('sf',JSON.stringify(D));go()}else push(1)}catch(e){}}
+function push(now){if(!fbU)return;clearTimeout(pt);pt=setTimeout(()=>fb.F.setDoc(fref(),{json:JSON.stringify(D),t:D.t||Date.now()}).catch(()=>{}),now?0:800)}
+function fbSave(){localStorage.setItem('sf_fb',$('#fbc').value.trim());fb=null;fbInit().then(()=>alert('Config tersimpan. Tekan Masuk Google.'))}
+async function fbIn(){await fbInit();if(fb)try{await fb.Au.signInWithPopup(fb.auth,new fb.Au.GoogleAuthProvider());$('#dl').close()}catch(e){alert('Login gagal: '+e.code)}}
+function fbOut(){if(fb)fb.Au.signOut(fb.auth);$('#dl').close()}
+function notify(t,b,k){const s=JSON.parse(localStorage.getItem('sf_n')||'{}');if(s[k])return;s[k]=1;const ks=Object.keys(s);if(ks.length>300)ks.slice(0,150).forEach(x=>delete s[x]);localStorage.setItem('sf_n',JSON.stringify(s));const o={body:b,icon:'icons/icon-192.png',tag:k};navigator.serviceWorker?.ready.then(r=>r.showNotification(t,o)).catch(()=>new Notification(t,o))}
+function chk(){if(!D.p.rm||!('Notification'in window)||Notification.permission!='granted')return;const n=new Date(),z=td(),m=n.getHours()*60+n.getMinutes();
+ D.jd.filter(x=>x.day==n.getDay()).forEach(x=>{const[h,i]=x.st.split(':'),d=+h*60+ +i-m;if(d>=0&&d<=10)notify('📚 '+x.sub+' mulai '+x.st,x.rm||'Siap-siap!',z+x.id)});
+ if(n.getHours()<6)return;
+ D.tg.filter(x=>!x.done&&x.du&&dd(x.du)<=1).forEach(x=>{const d=dd(x.du);notify(d<0?'⚠️ Tugas terlambat':d==0?'⏰ Tenggat hari ini':'⏰ Tenggat besok',x.ti+' · '+x.sub,z+x.id)});
+ D.uj.filter(x=>dd(x.dt)>=0&&dd(x.dt)<=1).forEach(x=>notify((dd(x.dt)?'📝 Besok ':'📝 Hari ini ')+x.ty,x.ti+' · '+x.sub,z+x.id));
+ D.kg.filter(x=>dd(x.dt)>=0&&dd(x.dt)<=1).forEach(x=>notify((dd(x.dt)?'🎯 Besok: ':'🎯 Hari ini: ')+x.ti,(x.tm||'')+' '+(x.pl||''),z+x.id))}
+setInterval(chk,60000);fbInit();go();chk();if(!D.p.n)settings();
+if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js');
+</script>
+</body>
+</html>
