@@ -102,6 +102,20 @@ input.ck{width:24px;height:24px}[data-sx=rm]{--a:#16a34a;--a2:#14b8a6;--bg:#effa
 .tin{display:flex;gap:8px;margin-top:14px;justify-content:center}.tin input{max-width:150px;text-align:center}
 .stats+.chips{margin-top:14px}
 .dt{position:relative;display:flex;gap:8px;align-items:center}.dt input[type=text]{flex:1;min-width:0}.dt .hd{position:absolute;right:0;bottom:0;width:1px;height:1px;opacity:0;pointer-events:none;padding:0;border:0}
+#cal{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:#020617a6;backdrop-filter:blur(6px);animation:fi .18s}
+.cp{width:min(92vw,360px);background:var(--sf);border:1px solid var(--bd);border-radius:28px;padding:18px;box-shadow:0 30px 80px -20px #000c,0 0 0 1px color-mix(in srgb,var(--a) 28%,transparent);animation:pop .24s cubic-bezier(.2,.9,.3,1.15)}
+.ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.ct{border:0;background:none;color:var(--ink);font:700 1.02em Poppins,sans-serif;padding:8px 14px;border-radius:12px;cursor:pointer}.ct:hover{background:var(--sf2)}
+.wd{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.wd span{text-align:center;font-size:.68em;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--mu);padding:6px 0}
+.dy{position:relative;aspect-ratio:1;border:0;border-radius:14px;background:none;color:var(--ink);font:500 .9em Poppins,sans-serif;cursor:pointer;transition:.12s}
+.dy:hover{background:color-mix(in srgb,var(--a) 15%,transparent)}.dy.o{color:var(--mu);opacity:.4}
+.dy.t{box-shadow:inset 0 0 0 1.5px var(--a);color:var(--a);font-weight:700}
+.dy.s{background:var(--g);color:#fff;font-weight:700;box-shadow:0 8px 20px -6px var(--a)}
+.dy.e:after{content:'';position:absolute;bottom:5px;left:50%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:var(--a2)}.dy.s.e:after{background:#fff}
+.mg{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:6px 0}.mg .dy{aspect-ratio:auto;padding:16px 0;border-radius:16px}
+.cf{display:flex;gap:8px;margin-top:14px}.cf .btn{flex:1;justify-content:center;padding:10px 6px}
+@keyframes fi{from{opacity:0}}@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.96)}}
+@media(max-width:600px){#cal{place-items:end center}.cp{width:100%;border-radius:28px 28px 0 0;padding-bottom:calc(18px + env(safe-area-inset-bottom))}}
 </style>
 </head>
 <body>
@@ -175,10 +189,21 @@ function go(){const nav=TABS.map(t=>`<button class="${tab==t[0]?'on':''}" onclic
  const hd=tab=='home'||tab=='wk';$('#fab').style.display=hd?'none':'';$('#add').style.visibility=hd?'hidden':'';theme()}
 function tg(id){const x=D.tg.find(x=>x.id==id);x.done=!x.done;save();go()}
 const toD=v=>v?v.split('-').reverse().join('/'):'';
-function dateF(n,v){return `<div class="dt"><input type="text" data-d inputmode="numeric" maxlength="10" placeholder="dd/mm/yyyy" value="${toD(v)}" oninput="dMask(this)"><button type="button" class="ib" title="Pilih tanggal" onclick="dPick(this)"><i class="fa">&#xf073;</i></button><input type="date" class="hd" tabindex="-1" value="${esc(v)}" onchange="dFrom(this)"><input type="hidden" name="${n}" value="${esc(v)}"></div>`}
+function dateF(n,v){return `<div class="dt"><input type="text" data-d inputmode="numeric" maxlength="10" placeholder="dd/mm/yyyy" value="${toD(v)}" oninput="dMask(this)"><button type="button" class="ib" title="Pilih tanggal" onclick="dPick(this)"><i class="fa">&#xf073;</i></button><input type="hidden" name="${n}" value="${esc(v)}"></div>`}
 function dMask(e){const d=e.value.replace(/\D/g,'').slice(0,8);e.value=d.length>4?d.slice(0,2)+'/'+d.slice(2,4)+'/'+d.slice(4):d.length>2?d.slice(0,2)+'/'+d.slice(2):d}
-function dPick(b){const h=b.parentNode.querySelector('.hd'),t=b.parentNode.querySelector('[data-d]'),m=t.value.match(/^(\d\d)\/(\d\d)\/(\d{4})$/);if(m)h.value=m[3]+'-'+m[2]+'-'+m[1];try{h.showPicker()}catch(e){h.focus()}}
-function dFrom(h){h.parentNode.querySelector('[data-d]').value=toD(h.value)}
+const MN=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+let CL=null;const isoD=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+function dPick(b){const t=b.parentNode.querySelector('[data-d]'),m=t.value.match(/^(\d\d)\/(\d\d)\/(\d{4})$/),n=new Date();CL={t,y:m?+m[3]:n.getFullYear(),m:m?+m[2]-1:n.getMonth(),s:m?m[3]+'-'+m[2]+'-'+m[1]:'',v:'d'};calR()}
+function calX(){const c=$('#cal');if(c)c.remove();CL=null}
+function calN(d){if(CL.v=='d'){CL.m+=d;if(CL.m<0){CL.m=11;CL.y--}if(CL.m>11){CL.m=0;CL.y++}}else CL.y+=d;calR()}
+function calS(i){CL.t.value=toD(i);calX()}
+function calR(){let c=$('#cal');if(!c){c=document.createElement('div');c.id='cal';$('#dl').appendChild(c);c.onclick=e=>{if(e.target==c)calX()}}
+ const{y,m,s,v}=CL,ev=new Set([...D.tg.filter(x=>!x.done).map(x=>x.du),...D.uj.map(x=>x.dt),...D.kg.map(x=>x.dt)]);let b='';
+ if(v=='d'){const f=(new Date(y,m,1).getDay()+6)%7,dim=new Date(y,m+1,0).getDate();b='<div class="wd">'+['Sen','Sel','Rab','Kam','Jum','Sab','Min'].map(x=>`<span>${x}</span>`).join('')+'</div><div class="wd">';
+  for(let i=0;i<42;i++){const d=new Date(y,m,i-f+1),k=isoD(d),o=i-f+1<1||i-f+1>dim;b+=`<button type="button" class="dy ${o?'o':''} ${k==td()?'t':''} ${k==s?'s':''} ${ev.has(k)?'e':''}" onclick="calS('${k}')">${d.getDate()}</button>`}b+='</div>'}
+ else b='<div class="mg">'+MN.map((x,i)=>`<button type="button" class="dy ${i==m?'s':''}" onclick="CL.m=${i};CL.v='d';calR()">${x.slice(0,3)}</button>`).join('')+'</div>';
+ c.innerHTML=`<div class="cp"><div class="ch"><button type="button" class="ib" onclick="calN(-1)"><i class="fa">&#xf053;</i></button><button type="button" class="ct" onclick="CL.v=CL.v=='d'?'m':'d';calR()">${v=='d'?MN[m]+' '+y:y} <i class="fa" style="font-size:.7em;opacity:.6">&#xf078;</i></button><button type="button" class="ib" onclick="calN(1)"><i class="fa">&#xf054;</i></button></div>${b}<div class="cf"><button type="button" class="btn gh" onclick="calS('')">Hapus</button><button type="button" class="btn gh" onclick="calS(td())">Hari ini</button><button type="button" class="btn" onclick="calX()">Tutup</button></div></div>`}
+$('#dl').addEventListener('cancel',e=>{if($('#cal')){e.preventDefault();calX()}});
 function dtChk(f){for(const t of f.querySelectorAll('[data-d]')){const hid=t.parentNode.querySelector('[type=hidden]');if(!t.value){hid.value='';continue}const m=t.value.match(/^(\d\d)\/(\d\d)\/(\d{4})$/);let ok=false;if(m){const d=new Date(m[3]+'-'+m[2]+'-'+m[1]+'T00:00');ok=d.getMonth()+1==+m[2]&&d.getDate()==+m[1]}if(!ok){alert('Format tanggal harus tgl/bln/thn, contoh 25/12/2026');t.focus();return false}hid.value=m[3]+'-'+m[2]+'-'+m[1]}return true}
 function openF(k,id){const e=E[k],it=id?D[k].find(x=>x.id==id):{},dl=$('#dl'),def={day:day,du:td(),dt:td(),st:'07:00',en:'08:00'};
  const inp=f=>{const[n,l,t]=f,v=it[n]??def[n]??'',o=t=='sub'?[...new Set([...D.sub,...(v?[v]:[])])]:t=='day'?[1,2,3,4,5,6,0]:Array.isArray(t)?t:null;
