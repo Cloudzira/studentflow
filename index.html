@@ -101,6 +101,7 @@ input.ck{width:24px;height:24px}[data-sx=rm]{--a:#16a34a;--a2:#14b8a6;--bg:#effa
 .lap{display:flex;justify-content:space-between;padding:11px 4px;border-bottom:1px solid var(--bd);font-size:.88em;font-variant-numeric:tabular-nums}.lap span:first-child{color:var(--mu)}
 .tin{display:flex;gap:8px;margin-top:14px;justify-content:center}.tin input{max-width:150px;text-align:center}
 .stats+.chips{margin-top:14px}
+.dt{position:relative;display:flex;gap:8px;align-items:center}.dt input[type=text]{flex:1;min-width:0}.dt .hd{position:absolute;right:0;bottom:0;width:1px;height:1px;opacity:0;pointer-events:none;padding:0;border:0}
 </style>
 </head>
 <body>
@@ -173,11 +174,17 @@ function go(){const nav=TABS.map(t=>`<button class="${tab==t[0]?'on':''}" onclic
  $('#ti').textContent=PT[tab];$('#dt').textContent=new Date().toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
  const hd=tab=='home'||tab=='wk';$('#fab').style.display=hd?'none':'';$('#add').style.visibility=hd?'hidden':'';theme()}
 function tg(id){const x=D.tg.find(x=>x.id==id);x.done=!x.done;save();go()}
+const toD=v=>v?v.split('-').reverse().join('/'):'';
+function dateF(n,v){return `<div class="dt"><input type="text" data-d inputmode="numeric" maxlength="10" placeholder="dd/mm/yyyy" value="${toD(v)}" oninput="dMask(this)"><button type="button" class="ib" title="Pilih tanggal" onclick="dPick(this)"><i class="fa">&#xf073;</i></button><input type="date" class="hd" tabindex="-1" value="${esc(v)}" onchange="dFrom(this)"><input type="hidden" name="${n}" value="${esc(v)}"></div>`}
+function dMask(e){const d=e.value.replace(/\D/g,'').slice(0,8);e.value=d.length>4?d.slice(0,2)+'/'+d.slice(2,4)+'/'+d.slice(4):d.length>2?d.slice(0,2)+'/'+d.slice(2):d}
+function dPick(b){const h=b.parentNode.querySelector('.hd'),t=b.parentNode.querySelector('[data-d]'),m=t.value.match(/^(\d\d)\/(\d\d)\/(\d{4})$/);if(m)h.value=m[3]+'-'+m[2]+'-'+m[1];try{h.showPicker()}catch(e){h.focus()}}
+function dFrom(h){h.parentNode.querySelector('[data-d]').value=toD(h.value)}
+function dtChk(f){for(const t of f.querySelectorAll('[data-d]')){const hid=t.parentNode.querySelector('[type=hidden]');if(!t.value){hid.value='';continue}const m=t.value.match(/^(\d\d)\/(\d\d)\/(\d{4})$/);let ok=false;if(m){const d=new Date(m[3]+'-'+m[2]+'-'+m[1]+'T00:00');ok=d.getMonth()+1==+m[2]&&d.getDate()==+m[1]}if(!ok){alert('Format tanggal harus tgl/bln/thn, contoh 25/12/2026');t.focus();return false}hid.value=m[3]+'-'+m[2]+'-'+m[1]}return true}
 function openF(k,id){const e=E[k],it=id?D[k].find(x=>x.id==id):{},dl=$('#dl'),def={day:day,du:td(),dt:td(),st:'07:00',en:'08:00'};
  const inp=f=>{const[n,l,t]=f,v=it[n]??def[n]??'',o=t=='sub'?[...new Set([...D.sub,...(v?[v]:[])])]:t=='day'?[1,2,3,4,5,6,0]:Array.isArray(t)?t:null;
-  return `<label>${l}</label>`+(o?`<select name="${n}">${o.map(x=>{const val=t=='day'?x:x,lab=t=='day'?DAYS[x]:x;return `<option value="${esc(val)}" ${val==v?'selected':''}>${esc(lab)}</option>`}).join('')}</select>`:`<input name="${n}" type="${t}" value="${esc(v)}" ${n=='ti'?'required':''}>`)};
+  return `<label>${l}</label>`+(o?`<select name="${n}">${o.map(x=>{const val=t=='day'?x:x,lab=t=='day'?DAYS[x]:x;return `<option value="${esc(val)}" ${val==v?'selected':''}>${esc(lab)}</option>`}).join('')}</select>`:t=='date'?dateF(n,v):`<input name="${n}" type="${t}" value="${esc(v)}" ${n=='ti'?'required':''}>`)};
  dl.innerHTML=`<form method="dialog" id="fm"><h3 style="margin:0">${id?'Ubah':'Tambah'} ${e.n}</h3>${e.f.map(inp).join('')}<div class="row" style="margin-top:14px">${id?`<button type="button" class="btn dg" onclick="del('${k}','${id}')">Hapus</button>`:''}<span class="sp"></span><button type="button" class="btn gh" onclick="$('#dl').close()">Batal</button><button class="btn">Simpan</button></div></form>`;
- $('#fm').onsubmit=ev=>{const o=Object.fromEntries(new FormData(ev.target));if(k=='jd')o.day=+o.day;if(id)Object.assign(it,o);else D[k].push({id:Date.now().toString(36),...o});save();go()};dl.showModal();document.activeElement.blur()}
+ $('#fm').onsubmit=ev=>{if(!dtChk(ev.target)){ev.preventDefault();return}const o=Object.fromEntries(new FormData(ev.target));if(k=='jd')o.day=+o.day;if(id)Object.assign(it,o);else D[k].push({id:Date.now().toString(36),...o});save();go()};dl.showModal();document.activeElement.blur()}
 function del(k,id){D[k]=D[k].filter(x=>x.id!=id);save();$('#dl').close();go()}
 function settings(){const p=D.p,s=(n,o)=>`<select name="${n}">${o.map(([v,l])=>`<option value="${v}" ${p[n]==v?'selected':''}>${l}</option>`).join('')}</select>`;
  $('#dl').innerHTML=`<form method="dialog" id="fm"><div class="dh"><h3>Pengaturan</h3><button type="button" class="ib" onclick="$('#dl').close()"><i class="fa">&#xf00d;</i></button></div>
