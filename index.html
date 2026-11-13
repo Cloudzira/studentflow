@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>StudentFlow - Agenda Siswa</title>
 <meta name="theme-color" content="#0b1b3a">
+<meta name="description" content="Jadwal pelajaran, PR, tugas, ujian, dan kegiatan siswa SD-SMA. Bisa diinstal dan dipakai offline.">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="StudentFlow"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="icons/icon-180.png">
 <style>
@@ -117,13 +119,44 @@ input.ck{width:24px;height:24px}[data-sx=rm]{--a:#16a34a;--a2:#14b8a6;--bg:#effa
 @keyframes fi{from{opacity:0}}@keyframes pop{from{opacity:0;transform:translateY(14px) scale(.96)}}
 @media(max-width:600px){#cal{place-items:end center}.cp{width:100%;border-radius:28px 28px 0 0;padding-bottom:calc(18px + env(safe-area-inset-bottom))}}
 img.lm{background:none;object-fit:contain;border-radius:12px;box-shadow:0 8px 20px -8px var(--a)}
+
+main{padding-bottom:12px}
+#app-footer{margin:16px 16px 0;padding:20px 0 calc(112px + env(safe-area-inset-bottom));border-top:1px solid var(--bd);text-align:center}
+#footer-social{display:flex;justify-content:center;flex-wrap:wrap;gap:10px}
+.soc{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:14px;border:1px solid var(--bd);background:var(--sf);color:var(--ink);font-size:.76em;font-weight:600;text-decoration:none;box-shadow:var(--sh);transition:.15s}
+.soc:hover{transform:translateY(-2px);border-color:var(--a);color:var(--a)}
+.soc svg{width:16px;height:16px;fill:var(--a);flex:none}
+.app-footer{margin:14px 0 0;font-size:.72em;color:var(--mu)}
+.app-footer a{color:var(--a);font-weight:700;text-decoration:none}.app-footer a:hover{text-decoration:underline}
+.app-footer .hr{color:#f43f5e}
+#inst{margin-top:14px}
+@media(min-width:900px){main{padding-bottom:8px}#app-footer{margin:16px 28px 0;padding-bottom:28px}}
+#gd{width:min(94vw,520px);padding:0}
+#gd .gh{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:18px 20px 12px;background:var(--sf);border-bottom:1px solid var(--bd)}
+#gd .gh h3{margin:0}#gd .gh p{margin:2px 0 0;font-size:.76em;color:var(--mu)}
+#gd .gb{padding:10px 20px 20px}
+#gd details{border:1px solid var(--bd);border-radius:16px;background:var(--sf2);margin:10px 0;overflow:hidden}
+#gd summary{display:flex;align-items:center;gap:12px;padding:12px 14px;font-weight:600;font-size:.9em;cursor:pointer;list-style:none}
+#gd summary::-webkit-details-marker{display:none}
+#gd summary .tl{width:34px;height:34px;border-radius:11px;font-size:14px}
+#gd summary:after{content:'\f078';font:900 11px FA;color:var(--mu);margin-left:auto;transition:.2s}
+#gd details[open] summary:after{transform:rotate(180deg)}
+#gd details[open]{border-color:color-mix(in srgb,var(--a) 40%,var(--bd))}
+#gd .gt{padding:0 16px 14px 16px;font-size:.84em;color:var(--ink)}
+#gd .gt p{margin:6px 0}#gd .gt ol,#gd .gt ul{margin:6px 0;padding-left:20px}#gd .gt li{margin:4px 0}
+#gd .gt .nb{color:var(--mu);font-size:.92em}
+#gd .gt .btn{margin-top:8px}
+#net{position:fixed;left:50%;top:calc(10px + env(safe-area-inset-top));transform:translateX(-50%);z-index:30;display:flex;align-items:center;gap:8px;max-width:92vw;padding:8px 16px;border-radius:99px;background:#0f172a;color:#fff;font-size:.76em;font-weight:500;box-shadow:0 10px 30px -8px #0008;animation:pop .24s}
+#net[hidden]{display:none}#net.on{background:#059669}
 </style>
 </head>
 <body>
-<div class="app"><aside id="sb"></aside><div class="mn"><header class="top"><img class="lm" src="icons/icon.svg" alt="StudentFlow"><div class="sp"><h1 id="ti"></h1><p id="dt"></p></div><button class="btn add" id="add"><i class="fa">&#xf067;</i>Tambah</button><button class="ib" id="bx" title="Gaya"></button><button class="ib" id="bm" title="Mode"></button><button class="ib" id="bs" title="Pengaturan"><i class="fa">&#xf013;</i></button></header><main id="v"></main></div></div>
+<div class="app"><aside id="sb"></aside><div class="mn"><header class="top"><img class="lm" src="icons/icon.svg" alt="StudentFlow"><div class="sp"><h1 id="ti"></h1><p id="dt"></p></div><button class="btn add" id="add"><i class="fa">&#xf067;</i>Tambah</button><button class="ib" id="bg" title="Panduan penggunaan" aria-label="Panduan penggunaan"><i class="fa">&#xf059;</i></button><button class="ib" id="bx" title="Gaya"></button><button class="ib" id="bm" title="Mode"></button><button class="ib" id="bs" title="Pengaturan"><i class="fa">&#xf013;</i></button></header><main id="v"></main><footer id="app-footer"><div id="footer-social"></div><div style="text-align:center"><button class="btn gh" id="inst" hidden onclick="doInstall()"><i class="fa">&#xf019;</i>Install aplikasi</button></div><p class="app-footer">Crafted with <span class="hr" aria-label="cinta">&hearts;</span> by <a href="https://kurniapedia.my.id" target="_blank" rel="noopener noreferrer"><strong>Kurniapedia</strong></a> 2026</p></footer></div></div>
 <button class="fab" id="fab"><i class="fa">&#xf067;</i></button>
 <nav class="bn" id="nv"></nav>
 <dialog id="dl"></dialog>
+<dialog id="gd"></dialog>
+<div id="net" role="status" hidden></div>
 <script>
 const $=s=>document.querySelector(s),H=document.documentElement;
 const DAYS=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
@@ -251,11 +284,11 @@ setInterval(()=>{if(W.tm.run){W.tm.left=W.tm.end-Date.now();if(W.tm.left<=0)tmDo
 let fb=null,fbU=null,pt;
 const FV='https://www.gstatic.com/firebasejs/10.12.2/';
 const FBC={apiKey:"AIzaSyDE31hA4xAB9FptNKP5TRp1zOkofI6UThw",authDomain:"studentflow-befb2.firebaseapp.com",projectId:"studentflow-befb2",storageBucket:"studentflow-befb2.firebasestorage.app",messagingSenderId:"410723057790",appId:"1:410723057790:web:590063f1c12b0518cb182f"};
-async function fbInit(){if(fb)return;try{const cfg=FBC,A=await import(FV+'firebase-app.js'),Au=await import(FV+'firebase-auth.js'),F=await import(FV+'firebase-firestore.js'),app=A.initializeApp(cfg);fb={Au,F,auth:Au.getAuth(app),db:F.getFirestore(app)};Au.onAuthStateChanged(fb.auth,u=>{fbU=u;if(u)pull()})}catch(e){fb=null;alert('Config Firebase tidak valid / gagal dimuat')}}
+async function fbInit(loud){if(fb)return;try{const cfg=FBC,A=await import(FV+'firebase-app.js'),Au=await import(FV+'firebase-auth.js'),F=await import(FV+'firebase-firestore.js'),app=A.initializeApp(cfg);fb={Au,F,auth:Au.getAuth(app),db:F.getFirestore(app)};Au.onAuthStateChanged(fb.auth,u=>{fbU=u;if(u)pull()})}catch(e){fb=null;if(loud)alert(navigator.onLine?'Layanan sinkronisasi gagal dimuat. Coba lagi nanti.':'Kamu sedang offline. Sinkronisasi butuh internet.')}}
 const fref=()=>fb.F.doc(fb.db,'users',fbU.uid,'studentflow','data');
 async function pull(){try{const r=await fb.F.getDoc(fref());if(r.exists()&&r.data().t>(D.t||0)){D=JSON.parse(r.data().json);localStorage.setItem('sf',JSON.stringify(D));go()}else push(1)}catch(e){}}
 function push(now){if(!fbU)return;clearTimeout(pt);pt=setTimeout(()=>fb.F.setDoc(fref(),{json:JSON.stringify(D),t:D.t||Date.now()}).catch(()=>{}),now?0:800)}
-async function fbIn(){await fbInit();if(fb)try{await fb.Au.signInWithPopup(fb.auth,new fb.Au.GoogleAuthProvider());$('#dl').close()}catch(e){alert('Login gagal: '+e.code)}}
+async function fbIn(){if(!navigator.onLine){alert('Kamu sedang offline. Masuk dengan Google butuh internet.');return}await fbInit(1);if(fb)try{await fb.Au.signInWithPopup(fb.auth,new fb.Au.GoogleAuthProvider());$('#dl').close()}catch(e){alert('Login gagal: '+e.code)}}
 function fbOut(){if(fb)fb.Au.signOut(fb.auth);$('#dl').close()}
 function notify(t,b,k){const s=JSON.parse(localStorage.getItem('sf_n')||'{}');if(s[k])return;s[k]=1;const ks=Object.keys(s);if(ks.length>300)ks.slice(0,150).forEach(x=>delete s[x]);localStorage.setItem('sf_n',JSON.stringify(s));const o={body:b,icon:'icons/icon-192.png',tag:k};navigator.serviceWorker?.ready.then(r=>r.showNotification(t,o)).catch(()=>new Notification(t,o))}
 function chk(){if(!D.p.rm||!('Notification'in window)||Notification.permission!='granted')return;const n=new Date(),z=td(),m=n.getHours()*60+n.getMinutes();
@@ -264,7 +297,59 @@ function chk(){if(!D.p.rm||!('Notification'in window)||Notification.permission!=
  D.tg.filter(x=>!x.done&&x.du&&dd(x.du)<=1).forEach(x=>{const d=dd(x.du);notify(d<0?'⚠️ Tugas terlambat':d==0?'⏰ Tenggat hari ini':'⏰ Tenggat besok',x.ti+' · '+x.sub,z+x.id)});
  D.uj.filter(x=>dd(x.dt)>=0&&dd(x.dt)<=1).forEach(x=>notify((dd(x.dt)?'📝 Besok ':'📝 Hari ini ')+x.ty,x.ti+' · '+x.sub,z+x.id));
  D.kg.filter(x=>dd(x.dt)>=0&&dd(x.dt)<=1).forEach(x=>notify((dd(x.dt)?'🎯 Besok: ':'🎯 Hari ini: ')+x.ti,(x.tm||'')+' '+(x.pl||''),z+x.id))}
-setInterval(chk,60000);fbInit();go();chk();if(!D.p.n)settings();
+/* ===== MEDIA SOSIAL & FOOTER ===== */
+const TF_SOCIALS=[
+  { name: 'Instagram', url: 'https://instagram.com/kurniapedia', vb: '0 0 448 512', path: 'M224.3 141a115 115 0 1 0-.6 230 115 115 0 1 0 .6-230m-.6 40.4a74.6 74.6 0 1 1 .6 149.2 74.6 74.6 0 1 1-.6-149.2m93.4-45.1a26.8 26.8 0 1 1 53.6 0 26.8 26.8 0 1 1-53.6 0m129.7 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8M399 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1' },
+  { name: 'TikTok', url: 'https://tiktok.com/@kurniapedia', vb: '0 0 448 512', path: 'M448.5 209.9c-44 .1-87-13.6-122.8-39.2v178.7c0 33.1-10.1 65.4-29 92.6s-45.6 48-76.6 59.6-64.8 13.5-96.9 5.3-60.9-25.9-82.7-50.8-35.3-56-39-88.9 2.9-66.1 18.6-95.2 40-52.7 69.6-67.7 62.9-20.5 95.7-16v89.9c-15-4.7-31.1-4.6-46 .4s-27.9 14.6-37 27.3-14 28.1-13.9 43.9 5.2 31 14.5 43.7 22.4 22.1 37.4 26.9 31.1 4.8 46-.1 28-14.4 37.2-27.1 14.2-28.1 14.2-43.8V0h88c-.1 7.4.6 14.9 1.9 22.2 3.1 16.3 9.4 31.9 18.7 45.7s21.3 25.6 35.2 34.6c19.9 13.1 43.2 20.1 67 20.1V210z' },
+  { name: 'Website', url: 'https://kurniapedia.my.id', vb: '0 0 512 512', path: 'M352 256c0 22.2-1.2 43.6-3.3 64H163.3c-2.2-20.4-3.3-41.8-3.3-64s1.2-43.6 3.3-64H348.7c2.2 20.4 3.3 41.8 3.3 64zm28.8-64H503.9c5.3 20.5 8.1 41.9 8.1 64s-2.8 43.5-8.1 64H380.8c2.1-20.6 3.2-42 3.2-64s-1.1-43.4-3.2-64zm112.6-32H376.7c-10-63.9-29.8-117.4-55.3-151.6c78.3 20.7 142 77.5 171.9 151.6zm-149.1 0H167.7c6.1-36.4 15.5-68.6 27-94.7c10.5-23.6 22.2-40.7 33.5-51.5C239.4 3.2 248.7 0 256 0s16.6 3.2 27.8 13.8c11.3 10.8 23 27.9 33.5 51.5c11.6 26 20.9 58.2 27 94.7zm-209 0H18.6C48.6 85.9 112.2 29.1 190.6 8.4C165.1 42.6 145.3 96.1 135.3 160zM8.1 192H131.2c-2.1 20.6-3.2 42-3.2 64s1.1 43.4 3.2 64H8.1C2.8 299.5 0 278.1 0 256s2.8-43.5 8.1-64zM194.7 446.6c-11.6-26-20.9-58.2-27-94.6H344.3c-6.1 36.4-15.5 68.6-27 94.6c-10.5 23.6-22.2 40.7-33.5 51.5C272.6 508.8 263.3 512 256 512s-16.6-3.2-27.8-13.8c-11.3-10.8-23-27.9-33.5-51.5zM135.3 352c10 63.9 29.8 117.4 55.3 151.6C112.2 482.9 48.6 426.1 18.6 352H135.3zm358.1 0c-30 74.1-93.6 130.9-171.9 151.6c25.5-34.2 45.2-87.7 55.3-151.6H493.4z' }
+];
+(function(){const box=$('#footer-social');if(box)box.innerHTML=TF_SOCIALS.map(x=>`<a class="soc" href="${esc(x.url)}" target="_blank" rel="noopener noreferrer" aria-label="${esc(x.name)}" title="${esc(x.name)}"><svg viewBox="${esc(x.vb)}" aria-hidden="true"><path d="${esc(x.path)}"/></svg>${esc(x.name)}</a>`).join('')})();
+/* ===== INSTALL (PWA) ===== */
+let ip=null;
+const isSA=()=>matchMedia('(display-mode:standalone)').matches||navigator.standalone===true;
+const isIOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function instUI(){const b=$('#inst');if(b)b.hidden=isSA()||!(ip||isIOS())}
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();ip=e;instUI();if($('#gd').open)guide('ins')});
+addEventListener('appinstalled',()=>{ip=null;instUI();if($('#gd').open)guide('ins')});
+async function doInstall(){if(ip){ip.prompt();try{await ip.userChoice}catch(e){}ip=null;instUI();if($('#gd').open)guide('ins')}else guide('ins')}
+/* ===== STATUS OFFLINE ===== */
+let nt;
+function netUI(first){const n=$('#net');clearTimeout(nt);
+ if(!navigator.onLine){n.className='';n.hidden=false;n.innerHTML='<i class="fa">&#xf071;</i>Mode offline. Data tetap tersimpan di perangkat.'}
+ else if(first){n.hidden=true}
+ else{n.className='on';n.hidden=false;n.innerHTML='<i class="fa">&#xf1eb;</i>Kembali online';nt=setTimeout(()=>n.hidden=true,2500)}}
+addEventListener('offline',()=>netUI());
+addEventListener('online',()=>{netUI();fbInit().then(()=>{if(fbU)push(1)})});
+/* ===== PANDUAN PENGGUNAAN ===== */
+function installBox(){
+ if(isSA())return '<p>✅ Aplikasi sudah terpasang di perangkat ini dan bisa dibuka dari layar utama.</p>';
+ if(ip)return '<p>Pasang StudentFlow supaya terbuka seperti aplikasi biasa dari layar utama, tanpa bilah alamat browser.</p><button class="btn" onclick="doInstall()"><i class="fa">&#xf019;</i>Install sekarang</button>';
+ if(isIOS())return '<ol><li>Buka halaman ini di <b>Safari</b>.</li><li>Ketuk tombol <b>Bagikan</b> (ikon kotak dengan panah ke atas).</li><li>Pilih <b>Tambah ke Layar Utama</b>, lalu ketuk <b>Tambah</b>.</li></ol>';
+ return '<ol><li><b>Chrome / Edge (Android &amp; komputer):</b> ketuk menu ⋮ lalu pilih <b>Install aplikasi</b> atau <b>Tambahkan ke layar utama</b>. Di komputer, klik juga ikon install di sebelah bilah alamat.</li><li><b>Samsung Internet / Firefox:</b> buka menu lalu pilih <b>Tambahkan ke layar utama</b>.</li></ol><p class="nb">Syarat: buka lewat alamat <b>https</b> dan gunakan browser versi terbaru.</p>'}
+function guide(o){
+ const G=[
+  ['go','f135','Mulai cepat','<ol><li>Ketuk <b>⚙ Pengaturan</b>, isi nama, jenjang (SD/SMP/SMA), gaya warna, dan daftar mata pelajaran.</li><li>Isi <b>Jadwal</b> pelajaran untuk tiap hari.</li><li>Catat <b>PR/Tugas</b>, <b>Ujian</b>, dan <b>Kegiatan</b> dengan tombol <b>+</b>.</li><li>Buka <b>Beranda</b> setiap hari untuk melihat ringkasan.</li></ol><p class="nb">Semua data tersimpan otomatis di perangkatmu.</p>'],
+  ['hm','f015','Beranda','<p>Ringkasan harian: lingkaran progres tugas, jumlah pelajaran hari ini (yang sedang berlangsung diberi tanda <b>Berlangsung</b>), tenggat terdekat, serta ujian dan kegiatan yang akan datang.</p>'],
+  ['jd','f073','Jadwal pelajaran','<ul><li>Pilih hari lewat tombol <b>Sen–Min</b>.</li><li>Ketuk <b>+</b> untuk menambah mapel, jam mulai, jam selesai, dan guru/ruang.</li><li>Ketuk kartu pelajaran untuk mengubah atau menghapusnya.</li></ul>'],
+  ['tg','f0ae','PR &amp; Tugas','<ul><li>Ketuk kotak centang untuk menandai tugas selesai.</li><li>Saring berdasarkan mapel, atau pindah antara <b>Belum selesai</b> dan <b>Selesai</b>.</li><li>Label tenggat <b>kuning</b> berarti hari ini atau besok, <b>merah</b> berarti sudah terlambat.</li></ul>'],
+  ['uj','f31c','Ujian &amp; nilai','<ul><li>Catat nama, jenis (Formatif, Sumatif, UTS, UAS, Ulangan), dan tanggal ujian.</li><li>Setelah hasil keluar, ketuk kartunya dan isi <b>Nilai</b>. Rata-rata nilai dihitung otomatis.</li></ul>'],
+  ['kg','f140','Kegiatan','<p>Catat kegiatan kategori Sekolah, Organisasi, Ekskul, atau Proyek lengkap dengan tanggal, jam, dan tempat.</p>'],
+  ['wk','f017','Waktu belajar','<ul><li><b>Jam:</b> waktu sekarang dan pelajaran berikutnya.</li><li><b>Stopwatch:</b> Mulai, Jeda, Putaran, dan Reset.</li><li><b>Timer:</b> pilih 5–60 menit, Pomodoro 25 menit, atau isi menit sendiri. Ada bunyi dan getar saat waktu habis.</li></ul><p class="nb">Waktu yang berjalan di stopwatch/timer tercatat otomatis sebagai statistik belajar hari ini dan 7 hari terakhir.</p>'],
+  ['tp','f53f','Tampilan &amp; pengingat','<ul><li>Tombol <b>bulan/matahari</b> mengganti mode terang dan gelap.</li><li>Tombol di sebelahnya mengganti gaya warna (4 pilihan).</li><li>Aktifkan <b>Pengingat</b> di Pengaturan dan izinkan notifikasi untuk jadwal 10 menit sebelum mulai, tenggat tugas, ujian, dan kegiatan. Pengingat aktif saat aplikasi terbuka atau terpasang.</li></ul>'],
+  ['sy','f0c2','Sinkronisasi &amp; cadangan','<ul><li><b>Masuk dengan Google</b> (Pengaturan) agar data tersinkron ke semua perangkat. Butuh internet.</li><li><b>Ekspor</b> menyimpan cadangan file JSON, <b>Impor</b> memulihkannya. Sebaiknya ekspor berkala.</li></ul>'],
+  ['of','f1eb','Mode offline','<p>Setelah dibuka sekali saat online, StudentFlow bisa dipakai tanpa internet. Semua data tersimpan di perangkat, jadi kamu tetap bisa melihat dan mengubah jadwal, tugas, ujian, kegiatan, serta memakai timer.</p><p class="nb">Yang butuh internet hanya Masuk dengan Google dan sinkronisasi. Perubahan akan disinkronkan lagi saat kembali online.</p>'],
+  ['ins','f019','Install aplikasi',installBox()]
+ ];
+ const op=typeof o=='string'?o:'go';
+ const d=$('#gd');
+ d.innerHTML=`<div class="gh"><div><h3>Panduan Penggunaan</h3><p>Ketuk judul untuk membuka penjelasan.</p></div><button type="button" class="ib" onclick="$('#gd').close()" aria-label="Tutup"><i class="fa">&#xf00d;</i></button></div><div class="gb">${G.map(([k,ic,t,h])=>`<details id="g-${k}" ${op==k?'open':''}><summary>${tile('var(--a)',ic)}<span>${t}</span></summary><div class="gt">${h}</div></details>`).join('')}</div>`;
+ if(!d.open)d.showModal();
+ if(op!='go')setTimeout(()=>{const e=$('#g-'+op);e&&e.scrollIntoView({block:'center'})},50);
+ document.activeElement.blur()}
+$('#bg').onclick=()=>guide();
+$('#gd').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.close()});
+instUI();
+setInterval(chk,60000);fbInit();go();chk();netUI(1);if(!D.p.n)settings();
 if('serviceWorker'in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js');
 </script>
 </body>
